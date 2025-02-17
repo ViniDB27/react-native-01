@@ -3,7 +3,6 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  // ScrollView,
   FlatList,
   Alert,
 } from 'react-native'
@@ -31,8 +30,7 @@ export function Home() {
       {
         text: 'Sim',
         onPress: () => {
-          const partcipantsAvict = partcipants.filter((item) => item !== name)
-          setPartcipants(partcipantsAvict)
+          setPartcipants((state) => state.filter((item) => item !== name))
         },
       },
       {
