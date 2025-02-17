@@ -5,32 +5,41 @@ import {
   TouchableOpacity,
   // ScrollView,
   FlatList,
+  Alert,
 } from 'react-native'
 import { styles } from './styles'
 import { Participante } from '../../components/Participant/intex'
+import { useState } from 'react'
 
 export function Home() {
-  const partcipants = [
-    'Vinicio Brejinski',
-    'Vitoria Brejinski',
-    'Levy Brejinski',
-    'Guto Telles',
-    'Amanda Telles',
-    'Isis Telles',
-    'Pessoa 1',
-    'Pessoa 2',
-    'Pessoa 3',
-    'Pessoa 4',
-    'Pessoa 5',
-    'Pessoa 6',
-  ]
+  const [partcipants, setPartcipants] = useState<string[]>([])
+  const [newPartcipant, setNewPartcipant] = useState<string>('')
 
   function handleParticipantAdd() {
-    console.log('Registrando')
+    if (partcipants.includes(newPartcipant)) {
+      return Alert.alert(
+        'Participante',
+        'Já existe um participante na lista com esse nome'
+      )
+    }
+    setPartcipants((state) => [...state, newPartcipant])
+    setNewPartcipant('')
   }
 
   function handleParticipantRemove(name: string) {
-    console.log(name)
+    Alert.alert('Remover', `Remover o participante ${name}?`, [
+      {
+        text: 'Sim',
+        onPress: () => {
+          const partcipantsAvict = partcipants.filter((item) => item !== name)
+          setPartcipants(partcipantsAvict)
+        },
+      },
+      {
+        text: 'Não',
+        style: 'cancel',
+      },
+    ])
   }
 
   return (
@@ -42,6 +51,8 @@ export function Home() {
           style={styles.input}
           placeholder="Nome do Participante"
           placeholderTextColor={styles.placeholderTextColor.color}
+          onChangeText={setNewPartcipant}
+          value={newPartcipant}
         />
         <TouchableOpacity style={styles.button} onPress={handleParticipantAdd}>
           <Text style={styles.buttonText}>+</Text>
@@ -63,18 +74,6 @@ export function Home() {
           <Text style={styles.listEmptyText}>A sua lista esta vazia...</Text>
         )}
       />
-      {/* <ScrollView
-        showsVerticalScrollIndicator={false}
-        showsHorizontalScrollIndicator={false}
-      >
-        {partcipants.map((partcipant) => (
-          <Participante
-            key={partcipant}
-            name={partcipant}
-            onRemove={() => handleParticipantRemove(partcipant)}
-          />
-        ))}
-      </ScrollView> */}
     </View>
   )
 }
